@@ -5,7 +5,6 @@
 
 
 int main() {
-    Deque deque;
     runAllTests();
     return 0;
 }

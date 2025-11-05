@@ -7,7 +7,7 @@
 void deque_resize(Deque *deque, size_t newCapacity) {
     if (newCapacity == 0) { 
         newCapacity = 1;
-    } 
+    }
 
     void *newData = malloc(newCapacity * deque->elementSize);
     if (newData == NULL) {
