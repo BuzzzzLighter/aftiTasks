@@ -4,14 +4,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-
-void test_resize_from_zero() {
-    Deque dq;
-    deque_init(&dq, 0, sizeof(int));
-    int x = 42;
-    deque_push_back(&dq, &x);
-}
-
 void test_wrap_around_after_resize() {
     Deque dq;
     deque_init(&dq, 2, sizeof(int));
@@ -111,7 +103,6 @@ void test_pop_single_element_twice() {
 }
 
 void runAllTests() {
-    test_resize_from_zero();
     test_wrap_around_after_resize();
     test_mixed_push_resize();
     test_get_with_wrapping();

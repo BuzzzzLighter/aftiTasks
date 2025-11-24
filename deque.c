@@ -1,13 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
 #include "deque.h"
 
 
+
+void deque_init(Deque *deque, size_t capacity, size_t element_size){
+    if (capacity == 0 || element_size == 0) return;
+    deque->elementSize = element_size;
+    deque->capacity = capacity;
+    deque->data = malloc(capacity * deque->elementSize);
+    deque->front = 0;
+    deque->back = 0;
+    deque->size = 0;
+}
+
 void deque_resize(Deque *deque, size_t newCapacity) {
-    if (newCapacity == 0) { 
-        newCapacity = 1;
-    }
+    if (newCapacity == deque->capacity) return;
 
     void *newData = malloc(newCapacity * deque->elementSize);
     if (newData == NULL) {
@@ -35,18 +45,6 @@ void deque_resize(Deque *deque, size_t newCapacity) {
     deque->back = deque->size;
 }
 
-void deque_init(Deque *deque, size_t capacity, size_t element_size){
-    if (capacity == 0){
-        capacity = 1;
-    }
-    deque->elementSize = element_size;
-    deque->data = malloc(capacity * deque->elementSize);
-    deque->front = 0;
-    deque->capacity = capacity;
-    deque->back = 0;
-    deque->size = 0;
-}
-
 void deque_free(Deque *deque){
     free(deque->data);
     deque->data = NULL; 
@@ -69,14 +67,17 @@ void deque_push_front(Deque *deque, void *element){
     if (deque->size == deque->capacity){
         deque_resize(deque, deque->capacity * 2);
     }
-    deque->front = (deque->front - 1 + deque->capacity) % deque->capacity;
+    if (deque->front == 0) {
+        deque->front = deque->capacity - 1;
+    } else {
+        deque->front--;
+    }
     memcpy((char*)deque->data + deque->front * deque->elementSize, element, deque->elementSize);
     deque->size++;
 }
 
 void deque_pop_back(Deque *deque, void *out){
     if (deque->size == 0){
-        printf("Deque is already empty\n");
         return;
     }
     deque->back = (deque->back - 1 + deque->capacity) % deque->capacity;
@@ -86,7 +87,6 @@ void deque_pop_back(Deque *deque, void *out){
 
 void deque_pop_front(Deque *deque, void *out){
     if (deque->size == 0){
-        printf("Deque is already empty\n");
         return;
     }
     memcpy(out, (char*)deque->data + deque->front * deque->elementSize, deque->elementSize);
@@ -96,7 +96,6 @@ void deque_pop_front(Deque *deque, void *out){
 
 void deque_get(Deque *deque, size_t index, void *out){
     if (index >= deque->size){
-        printf("Index out of range\n");
         return;
     }
 
