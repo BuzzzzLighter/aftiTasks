@@ -50,3 +50,4 @@ unsigned long hashString(void *key) {
         hash = hash * 33 + c; 
     return hash;
 }
+

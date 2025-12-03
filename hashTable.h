@@ -1,13 +1,14 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 #include <stddef.h>
+#include <stdbool.h> 
 
 
 typedef struct {
     void *key;
     void *value;
-    int is_occupied;
-    int is_deleted;
+    bool is_occupied;
+    bool is_deleted;
 } HashCell;
 
 typedef struct {
@@ -26,14 +27,14 @@ HashTable *hashT_create(size_t capacity, unsigned long (*hash_func)(void *),int 
 
 void hashT_destroy(HashTable *hashTab);
 
-int hashT_insert(HashTable *hashTab, void *key, void *value);
+void hashT_insert(HashTable *hashTab, void *key, void *value);//заменить int
 void *hashT_search(HashTable *hashTab,  void *key);
-int hashT_remove(HashTable *hashTab, void *key);
+void hashT_remove(HashTable *hashTab, void *key);//int заменить 
 
 size_t next_index(size_t i, size_t capacity);
 
 void hashT_foreach(HashTable *hashTab, void (*func)(void *key, void *value));
-int hashT_resize(HashTable *hashTab, size_t new_capacity);
+void hashT_resize(HashTable *hashTab, size_t new_capacity); //заменить int
 void printPairs(void* key, void* value);
 
 #endif 
